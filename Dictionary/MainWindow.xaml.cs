@@ -18,11 +18,36 @@ namespace Dictionary
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
+        }
+
+        private void ButtonClickAdmin(object sender, RoutedEventArgs e)
+        {
+            AdministrationWindow window = new AdministrationWindow();
+            window.Show();
+            this.Close();
+        }
+
+        private void ButtonClickSearch(object sender, RoutedEventArgs e)
+        {
+            SearchWindow window = new SearchWindow();
+            window.Show();
+            this.Close();
+        }
+
+        private void ButtonClickEntertainment(object sender, RoutedEventArgs e)
+        {
+            EntertainmentWindow window = new EntertainmentWindow();
+            window.Show();
+            this.Close();
         }
     }
 }

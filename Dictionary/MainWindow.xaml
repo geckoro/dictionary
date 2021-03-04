@@ -7,6 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button HorizontalAlignment="Center" Content="Administration" Width="104" Height="32" Margin="24,0"
+                    Click="ButtonClickAdmin" ToolTip="This is for adding, modifying or deleting words"/>
+            <Button HorizontalAlignment="Center" Content="Search" Width="104" Height="32" Margin="24,0"
+                    Click="ButtonClickSearch" ToolTip="This is for searching words"/>
+            <Button HorizontalAlignment="Center" Content="Entertainment" Width="104" Height="32" Margin="24,0"
+                    Click="ButtonClickEntertainment" ToolTip="This is for a game based on guessing words"/>
+        </StackPanel>
     </Grid>
 </Window>

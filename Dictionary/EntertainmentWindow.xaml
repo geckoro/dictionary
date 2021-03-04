@@ -1,0 +1,13 @@
+﻿<Window x:Class="Dictionary.EntertainmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dictionary"
+        mc:Ignorable="d"
+        Title="EntertainmentWindow" Height="450" Width="800">
+    <Grid>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Back to Menu" Width="104" Height="32" Margin="24,24"
+                    Click="Button_Click" ToolTip="This is for going back to the menu"/>
+    </Grid>
+</Window>
