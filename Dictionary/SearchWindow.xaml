@@ -5,9 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dictionary"
         mc:Ignorable="d"
-        Title="SearchWindow" Height="450" Width="800">
+        Title="SearchWindow" Height="450" Width="800"
+        Loaded="SearchWindow_OnLoaded">
+
     <Grid>
+        <TextBox Name="textBoxSearch" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50"/>
+        <ListBox Name="listBoxSearch" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="0,70"
+                 SelectionChanged="listBoxSearch_SelectionChanged"  Visibility="Collapsed" />
+        <!--StackPanel containg the elements of a word-->
+        <StackPanel Name="labels" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Visible">
+            <!--labels-->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <Label HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Word:"/>
+                <Label HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Description:"/>
+                <Label HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Category:"/>
+            </StackPanel>
+
+            <!--details-->
+            <StackPanel Name="details" VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <TextBlock Name="wordName" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                           Text="{Binding ElementName=listBoxSearch, Path=SelectedItem.Name}"/>
+                <TextBlock Name="wordDescription" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                           Text="{Binding ElementName=listBoxSearch, Path=SelectedItem.Description}"/>
+                <TextBlock Name="wordCategory" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                           Text="{Binding ElementName=listBoxSearch, Path=SelectedItem.Category}"/>
+            </StackPanel>
+
+            <!--image-->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <Image Name="imgPhotoModify" Width="100" Height="100" Margin="20,20" ImageFailed="WordImage_OnImageFailed"
+                       Source="{Binding ElementName=listBoxSearch, Path=SelectedItem.ImagePath, Mode=OneWay}"/>
+            </StackPanel>
+        </StackPanel>
+        <!--END-->
         <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Back to Menu" Width="104" Height="32" Margin="24,24"
-                    Click="Button_Click" ToolTip="This is for going back to the menu"/>
+                    Click="ButtonClickMenu" ToolTip="This is for going back to the menu"/>
     </Grid>
 </Window>

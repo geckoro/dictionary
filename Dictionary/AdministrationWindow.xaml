@@ -5,9 +5,143 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dictionary"
         mc:Ignorable="d"
-        Title="AdministrationWindow" Height="450" Width="800">
+        Loaded="AdministrationWindow_OnLoaded"
+        Title="AdministrationWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance local:Word}">
     <Grid>
+        <!--StackPanel containing the list of words-->
+        <StackPanel Name="otherPanel" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Hidden">
+            <ListBox x:Name="WordsList" SelectionMode="Single" FontSize="15" ItemsSource="{Binding Path=Words}" Width="400" Height="250">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Name, Mode=OneWay}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <Button Name="buttonModify" HorizontalAlignment="Center" Content="Modify word" Width="104" Height="32" Margin="10,10"
+                    Click="ButtonClickModify" ToolTip="This is for modifying the word"/>
+                <Button Name="buttonDelete" HorizontalAlignment="Center" Content="Delete word" Width="104" Height="32" Margin="10,10"
+                    Click="ButtonClickDelete" ToolTip="This is for deleting the word"/>
+            </StackPanel>
+        </StackPanel>
+        <!--END-->
+
+        <!--StackPanel containg the elements for modifying a word-->
+        <StackPanel Name="modifyWordPanel" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Hidden">
+            <!--labels-->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <Label Name="labelNameModify" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Word:"/>
+                <Label Name="labelDescriptionModify" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Description:"/>
+                <Label Name="labelCategoryModify" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Category:"/>
+                <StackPanel Name="newCategoryModify" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <CheckBox Name="checkboxNewCategoryModify" IsChecked="False" Margin="0,6"/>
+                    <Label Name="labelNewCategoryModify" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="New Category:"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!--inputs-->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <TextBox Name="inputNameModify" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                         Text="{Binding ElementName=WordsList, Path=SelectedItem.Name, Mode=TwoWay}"/>
+                <TextBox Name="inputDescriptionModify" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                         Text="{Binding ElementName=WordsList, Path=SelectedItem.Description, Mode=TwoWay}"/>
+                <ComboBox Name="comboBoxCategoryModify" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                          SelectedItem="{Binding ElementName=WordsList, Path=SelectedItem.Category, Mode=TwoWay}" SelectedIndex="1"/>
+                <TextBox Name="inputNewCategoryModify" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                         IsEnabled="{Binding ElementName=checkboxNewCategoryModify, Path=IsChecked}"/>
+            </StackPanel>
+
+            <!--image-->
+            <Image Name="imgPhotoModify" Width="100" Height="100" Margin="20,20" ImageFailed="WordImage_OnImageFailed"
+                   Source="{Binding ElementName=WordsList, Path=SelectedItem.ImagePath, Mode=OneWay}"/>
+                
+
+            <Button Name="buttonModifyWord" HorizontalAlignment="Center" Content="Modify word" Width="104" Height="32"
+                    Click="ButtonClickUpdate" ToolTip="This is for modifying the word">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=inputNameModify, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=inputDescriptionModify, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+        <!--END-->
+
+        <!--StackPanel containg the elements for adding a new word-->
+        <StackPanel Name="addNewWordPanel" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Hidden">
+            <!--labels-->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <Label Name="labelName" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Word:"/>
+                <Label Name="labelDescription" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Description:"/>
+                <Label Name="labelCategory" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="Category:"/>
+                <StackPanel Name="newCategory" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <CheckBox Name="checkboxNewCategory" IsChecked="False" Margin="0,6"/>
+                    <Label Name="labelNewCategory" HorizontalAlignment="Right" Width="95" Height="30" Margin="0,0"
+                       Content="New Category:"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!--inputs-->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <TextBox Name="inputName" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"/>
+                <TextBox Name="inputDescription" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"/>
+                <ComboBox Name="comboBoxCategory" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5" SelectedIndex="1"/>
+                <TextBox Name="inputNewCategory" HorizontalAlignment="Left" Width="104" Height="20" Margin="0,5"
+                         IsEnabled="{Binding ElementName=checkboxNewCategory, Path=IsChecked}"/>
+            </StackPanel>
+
+            <!--image-->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <Image Name="imgPhoto" Width="100" Height="100" Margin="20,20" ImageFailed="WordImage_OnImageFailed"
+                       Source="{Binding ElementName=WordsList, Path=SelectedItem.ImagePath, Mode=OneWay}"/>
+                <Button Name="browse" HorizontalAlignment="Center" Content="Browse" Width="50" Height="32" Margin="10,0"
+                    Click="ButtonClickBrowse" ToolTip="This is for selecting a picture for the word"/>
+            </StackPanel>
+
+            <Button Name="buttonAddNew" HorizontalAlignment="Center" Content="Add word" Width="104" Height="32"
+                    Click="ButtonClickAddNew" ToolTip="This is for adding the word">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=inputName, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Text.Length, ElementName=inputDescription, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+        <!--END-->
+        
+        <!--The default StackPanel-->
+        <StackPanel Name="defaultPanel" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Visible">
+            <Button Name ="buttonAdd" HorizontalAlignment="Center" Content="Add word" Width="104" Height="32" Margin="24,0"
+                    Click="ButtonClickAdd" ToolTip="This is for adding a word"/>
+            <Button Name="buttonOther" HorizontalAlignment="Center" Content="Other" Width="104" Height="32" Margin="24,0"
+                    Click="ButtonClickOther" ToolTip="This is for modifying or deleting a word"/>
+        </StackPanel>
+        <!--END-->
+            
         <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Back to Menu" Width="104" Height="32" Margin="24,24"
-                    Click="Button_Click" ToolTip="This is for going back to the menu"/>
+                    Click="ButtonClickMenu" ToolTip="This is for going back to the menu"/>
     </Grid>
 </Window>

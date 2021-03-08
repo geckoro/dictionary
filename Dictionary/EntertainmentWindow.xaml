@@ -3,11 +3,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Dictionary"
+        xmlns:local="clr-namespace:Dictionary" d:DataContext="{d:DesignInstance Type=local:Word}"
         mc:Ignorable="d"
-        Title="EntertainmentWindow" Height="450" Width="800">
+        Title="EntertainmentWindow" Height="450" Width="800"
+        Loaded="EntertainmentWindow_OnLoaded">
     <Grid>
+        <Label Name="labelTip" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100"/>
+        <Image Name="imageTip" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="100" Margin="0,50" 
+               Source="{Binding Path=Words, Mode=OneWay}"/>
+        <Label Name="labelRight" Foreground="LimeGreen" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,145" Visibility="Hidden"
+               Content="You guessed the word! Nicely done!"/>
+        <Label Name="labelWrong" Foreground="OrangeRed" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,145" Visibility="Hidden"
+               Content="You didn't guess the word, such a shame..."/>
+        <Label Name="labelFinished" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,145" Visibility="Visible"/>
+        <TextBox Name="input" Width="200" Height="20"/>
+        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Name="buttonGuess" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Guess" Width="104" Height="32" Margin="8,70"
+                    Click="ButtonClickGuess" ToolTip="This is for guessing the word"/>
+            <Button Name="buttonNext" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Next" Width="104" Height="32" Margin="8,70" IsEnabled="False"
+                    Click="ButtonClickNext" ToolTip="This is for advancing to the next word"/>
+            <Button Name="buttonFinish" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Finish" Width="104" Height="32" Margin="8,70" Visibility="Collapsed"
+                    Click="ButtonClickFinish" ToolTip="This is for finishing the game"/>
+        </StackPanel>
         <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Back to Menu" Width="104" Height="32" Margin="24,24"
-                    Click="Button_Click" ToolTip="This is for going back to the menu"/>
+                    Click="ButtonClickMenu" ToolTip="This is for going back to the menu"/>
     </Grid>
 </Window>
