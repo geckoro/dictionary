@@ -6,12 +6,14 @@
         xmlns:local="clr-namespace:Dictionary"
         mc:Ignorable="d"
         Title="SearchWindow" Height="450" Width="800"
-        Loaded="SearchWindow_OnLoaded">
+        Loaded="Window_Loaded">
 
     <Grid>
-        <TextBox Name="textBoxSearch" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50"/>
-        <ListBox Name="listBoxSearch" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="0,70"
-                 SelectionChanged="listBoxSearch_SelectionChanged"  Visibility="Collapsed" />
+        <ComboBox Name="comboBoxSearch" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50"
+                  SelectionChanged="ComboBoxSearch_SelectionChanged"/>
+        <TextBox Name="textBoxSearch" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80" Visibility="Hidden"/>
+        <ListBox Name="listBoxSearch" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"  Margin="0,100"
+                 SelectionChanged="ListBoxSearch_SelectionChanged"  Visibility="Collapsed" />
         <!--StackPanel containg the elements of a word-->
         <StackPanel Name="labels" VerticalAlignment="Stretch" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Visible">
             <!--labels-->

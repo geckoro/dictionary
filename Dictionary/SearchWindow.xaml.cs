@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Dictionary
 {
@@ -23,27 +15,47 @@ namespace Dictionary
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            textBoxSearch.TextChanged += new TextChangedEventHandler(textBoxSearch_TextChanged);
+            textBoxSearch.TextChanged += new TextChangedEventHandler(TextBoxSearch_TextChanged);
         }
-
-        private void SearchWindow_OnLoaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            comboBoxSearch.Items.Add("*all categories");
+            HashSet<string> categories = new HashSet<string>();
+            foreach (Word word in MyDictionary.Words)
+            {
+                if (!comboBoxSearch.Items.Contains(word.Category))
+                    comboBoxSearch.Items.Add(word.Category);
+                categories.Add(word.Category);
+            }
         }
 
-        private void textBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private void ComboBoxSearch_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxSearch.SelectedItem != null)
+            {
+                textBoxSearch.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             string typedString = textBoxSearch.Text;
             List<Word> autoList = new List<Word>();
             autoList.Clear();
 
-            foreach (var word in ((App)Application.Current).Words)
+            foreach (var word in MyDictionary.Words)
             {
                 if (!string.IsNullOrEmpty(textBoxSearch.Text))
                 {
-                    if (word.Name.StartsWith(typedString))
+                    if (comboBoxSearch.SelectedItem != null)
                     {
-                        autoList.Add(word);
+                        if (word.Name.StartsWith(typedString))
+                        {
+                            if (comboBoxSearch.SelectedItem.Equals("*all categories") || word.Category.Equals(comboBoxSearch.SelectedItem.ToString()))
+                            {
+                                autoList.Add(word);
+                            }
+                        }
                     }
                 }
             }
@@ -65,17 +77,17 @@ namespace Dictionary
             }
         }
 
-        private void listBoxSearch_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListBoxSearch_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (listBoxSearch.ItemsSource != null)
             {
                 listBoxSearch.Visibility = Visibility.Collapsed;
-                textBoxSearch.TextChanged -= new TextChangedEventHandler(textBoxSearch_TextChanged);
+                textBoxSearch.TextChanged -= new TextChangedEventHandler(TextBoxSearch_TextChanged);
                 if (listBoxSearch.SelectedIndex != -1)
                 {
                     textBoxSearch.Text = listBoxSearch.SelectedItem.ToString();
                 }
-                textBoxSearch.TextChanged += new TextChangedEventHandler(textBoxSearch_TextChanged);
+                textBoxSearch.TextChanged += new TextChangedEventHandler(TextBoxSearch_TextChanged);
             }
         }
 

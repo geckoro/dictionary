@@ -26,16 +26,16 @@ namespace Dictionary
 
         public AdministrationWindow()
         {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
         }
 
         private void AdministrationWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (((App)Application.Current).Words == null) return;
+            if (MyDictionary.Words == null) return;
 
             HashSet<string> categories = new HashSet<string>();
-            foreach (Word word in ((App)Application.Current).Words)
+            foreach (Word word in MyDictionary.Words)
             {
                 WordsList.Items.Add(word);
                 categories.Add(word.Category);
@@ -48,12 +48,6 @@ namespace Dictionary
             }
         }
 
-        private void HideButtons()
-        {
-            buttonAdd.Visibility = Visibility.Hidden;
-            buttonOther.Visibility = Visibility.Hidden;
-        }
-
         private void ButtonClickMenu(object sender, RoutedEventArgs e)
         {
             MainWindow window = new MainWindow();
@@ -61,44 +55,10 @@ namespace Dictionary
             this.Close();
         }
 
-        private void ButtonClickAddNew(object sender, RoutedEventArgs e)
+        private void HideButtons()
         {
-            string wordName = inputName.Text;
-
-            string wordDescription = inputDescription.Text;
-
-            string wordCategory;
-
-            if (checkboxNewCategory.IsChecked != null)
-            {
-                if ((bool)checkboxNewCategory.IsChecked)
-                {
-                    wordCategory = inputNewCategory.Text;
-
-                    comboBoxCategory.Items.Add(wordCategory);
-                    comboBoxCategoryModify.Items.Add(wordCategory);
-                }
-                else
-                {
-                    wordCategory = comboBoxCategory.SelectedItem.ToString();
-                }
-
-                var wordImagePath = path;
-                if (path == null)
-                {
-                    Word word = new Word(wordName, wordDescription, wordCategory);
-                    ((App)Application.Current).Words.Add(word);
-                }
-                else
-                {
-                    Word word = new Word(wordName, wordDescription, wordCategory, wordImagePath);
-                    ((App)Application.Current).Words.Add(word);
-                }
-
-                AdministrationWindow window = new AdministrationWindow();
-                window.Show();
-                this.Close();
-            }
+            buttonAdd.Visibility = Visibility.Hidden;
+            buttonOther.Visibility = Visibility.Hidden;
         }
 
         private void ButtonClickAdd(object sender, RoutedEventArgs e)
@@ -119,9 +79,55 @@ namespace Dictionary
             otherPanel.Visibility = Visibility.Hidden;
         }
 
+        private void ButtonClickAddNew(object sender, RoutedEventArgs e)
+        {
+            if (checkboxNewCategory.IsChecked != null)
+            {
+                string inputCategory;
+                if ((bool)checkboxNewCategory.IsChecked)
+                {
+                    inputCategory = inputNewCategory.Text;
+                    comboBoxCategory.Items.Add(inputCategory);
+                    comboBoxCategoryModify.Items.Add(inputCategory);
+                }
+                else
+                {
+                    inputCategory = comboBoxCategory.SelectedItem.ToString();
+                }
+                MyDictionary.AddWord(inputName.Text, inputDescription.Text, inputCategory, path);
+            }
+
+            AdministrationWindow window = new AdministrationWindow();
+            window.Show();
+            this.Close();
+        }
+
+        private void ButtonClickUpdate(object sender, RoutedEventArgs e)
+        {
+            if (checkboxNewCategoryModify.IsChecked != null)
+            {
+                string inputCategoryModify;
+                if ((bool)checkboxNewCategoryModify.IsChecked)
+                {
+                    inputCategoryModify = inputNewCategoryModify.Text;
+                    comboBoxCategory.Items.Add(newCategory);
+                    comboBoxCategoryModify.Items.Add(newCategory);
+                }
+                else
+                {
+                    inputCategoryModify = comboBoxCategoryModify.Text;
+                }
+                MyDictionary.UpdateWord(((Word)WordsList.SelectedItem).Name, inputNameModify.Text, inputDescriptionModify.Text, inputCategoryModify);
+            }
+
+            AdministrationWindow window = new AdministrationWindow();
+            window.Show();
+            this.Close();
+        }
+
         private void ButtonClickDelete(object sender, RoutedEventArgs e)
         {
-            ((App)Application.Current).Words.Remove((Word)WordsList.SelectedItem);
+            MyDictionary.RemoveWord(((Word)WordsList.SelectedItem).Name);
             WordsList.Items.Remove(WordsList.SelectedItem);
         }
 
@@ -139,37 +145,6 @@ namespace Dictionary
             }
         }
 
-        private void WordImage_OnImageFailed(object sender, ExceptionRoutedEventArgs e)
-        {
-            ((Image)sender).Source = new BitmapImage(new Uri(@"D:\FACULT 2020-2021\MVP\Dictionary\Dictionary\Resources\noimage.png"));
-        }
-
-        private void ButtonClickUpdate(object sender, RoutedEventArgs e)
-        {
-            ((Word)WordsList.SelectedItem).Name = inputNameModify.Text;
-            ((Word)WordsList.SelectedItem).Description = inputDescriptionModify.Text;
-
-            if (checkboxNewCategoryModify.IsChecked != null)
-            {
-                if ((bool)checkboxNewCategoryModify.IsChecked)
-                {
-                    string newCategory = inputNewCategoryModify.Text;
-
-                    ((Word)WordsList.SelectedItem).Category = newCategory;
-                    comboBoxCategory.Items.Add(newCategory);
-                    comboBoxCategoryModify.Items.Add(newCategory);
-                }
-                else
-                {
-                    ((Word)WordsList.SelectedItem).Category = comboBoxCategoryModify.Text;
-                }
-            }
-
-            AdministrationWindow window = new AdministrationWindow();
-            window.Show();
-            this.Close();
-        }
-
         private void ButtonClickBrowseModify(object sender, RoutedEventArgs e)
         {
             OpenFileDialog op = new OpenFileDialog();
@@ -182,6 +157,11 @@ namespace Dictionary
                 imgPhoto.Source = new BitmapImage(new Uri(op.FileName));
                 path = op.FileName;
             }
+        }
+
+        private void WordImage_OnImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            ((Image)sender).Source = new BitmapImage(new Uri(@"D:\FACULT 2020-2021\MVP\Dictionary\Dictionary\Resources\noimage.png"));
         }
     }
 }

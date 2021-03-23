@@ -86,6 +86,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GuessingGame.cs" />
+    <Compile Include="MyDictionary.cs" />
     <Compile Include="EntertainmentWindow.xaml.cs">
       <DependentUpon>EntertainmentWindow.xaml</DependentUpon>
     </Compile>
